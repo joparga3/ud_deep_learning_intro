@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jose Parreno Garcia" />
+
+
+<title>Intro concepts deep learning</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Intro to Neural networks</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Intro to Neural networks</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Intro concepts deep learning</h1>
+<h4 class="author"><em>Jose Parreno Garcia</em></h4>
+<h4 class="date"><em>March 2018</em></h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#fundamental-concepts-in-deep-learning"><span class="toc-section-number">1</span> Fundamental concepts in deep learning</a><ul>
+<li><a href="#why-is-deep-learning-important-nowadays"><span class="toc-section-number">1.1</span> Why is deep learning important nowadays</a></li>
+<li><a href="#deep-learning-definition-and-key-features"><span class="toc-section-number">1.2</span> Deep learning definition and key features</a></li>
+<li><a href="#how-to-automatically-learn-from-data"><span class="toc-section-number">1.3</span> How to automatically learn from data</a></li>
+</ul></li>
+<li><a href="#introduction-to-artificial-neural-networks"><span class="toc-section-number">2</span> Introduction to artificial neural networks</a><ul>
+<li><a href="#the-vast-world-of-anns"><span class="toc-section-number">2.1</span> The vast world of ANNs</a></li>
+<li><a href="#the-perceptron-algorithm"><span class="toc-section-number">2.2</span> The perceptron algorithm</a><ul>
+<li><a href="#perceptron-geometric-interpretation"><span class="toc-section-number">2.2.1</span> Perceptron geometric interpretation</a></li>
+</ul></li>
+<li><a href="#the-multilayer-perceptron"><span class="toc-section-number">2.3</span> The multilayer perceptron</a></li>
+<li><a href="#packages-for-anns"><span class="toc-section-number">2.4</span> Packages for ANNs</a></li>
+</ul></li>
+<li><a href="#classification-with-2-layers-of-anns"><span class="toc-section-number">3</span> Classification with 2-layers of ANNs</a><ul>
+<li><a href="#increasingdecreasing-max-iterations-for-the-model"><span class="toc-section-number">3.0.1</span> Increasing/decreasing max iterations for the model</a></li>
+<li><a href="#increasingdecreasing-hidden-layers-for-the-model"><span class="toc-section-number">3.0.2</span> Increasing/decreasing hidden layers for the model</a></li>
+</ul></li>
+<li><a href="#probabilistic-predictions-with-a-2-layer-ann"><span class="toc-section-number">4</span> Probabilistic predictions with a 2-layer ANN</a></li>
+</ul>
+</div>
+
+<style>
+body {
+text-align: justify}
+</style>
+<p><br></p>
+<pre class="r"><code>library(knitr)</code></pre>
+<p>In this blog we are going to talk about</p>
+<ul>
+<li>Fundamental concepts in deep learning</li>
+<li>Introduction to artificial neural networks</li>
+<li>Classification with 2-layers of ANNs</li>
+<li>Probabilistic predictions with a 2-layer ANN</li>
+</ul>
+<p><br></p>
+<div id="fundamental-concepts-in-deep-learning" class="section level1">
+<h1><span class="header-section-number">1</span> Fundamental concepts in deep learning</h1>
+<div id="why-is-deep-learning-important-nowadays" class="section level2">
+<h2><span class="header-section-number">1.1</span> Why is deep learning important nowadays</h2>
+<p>Deep learning is a new approach to improving what was the state-of-the-art machine learning techniques for very complicated tasks, like image recognition, speed recognition, natural language processing, etc. Real world examples are:</p>
+<ul>
+<li>Netflix uses deep learning on its recommendation engine to suggest you what to watch next.</li>
+<li>Amazon uses it too.</li>
+<li>Helps with google image searches</li>
+<li>Tackles fraud detection much better</li>
+</ul>
+<p>One of the things that deep learning tackles really well (like some specific machine learning algorithms) is handling directly the raw data. As an example, when using linear models you always have to be careful with scaling the variables to make sure none have an overweight just because their values are bigger than others. It can also handle missing data effectively.</p>
+<p>Obviously, these improvements come at a cost, which currently can be split in 2: expensive computation power required and a certain degree of knowledge to tweak the model parameters. Nowdays, unless you want to work with a super simple laptop, all companies will have the ability to tackle the first problem, either by buying commodity software or renting cloud computational power. The knowledge gap is something anyone can learn online and by playing around, but as always, it required time investment.</p>
+<p><img src="images/1.PNG" width="691" /></p>
+</div>
+<div id="deep-learning-definition-and-key-features" class="section level2">
+<h2><span class="header-section-number">1.2</span> Deep learning definition and key features</h2>
+<p>Check the image below:</p>
+<p><img src="images/2.PNG" width="721" /></p>
+<p>In this graph we can see 3 different approaches to tackle predictive modelling (fromm input to output):</p>
+<ul>
+<li>The classical machine learning has a specific layer of designing features that the model will use. The design can be manually deciding what variables we need to add to the model to creating different variables with pre-processing steps or changing distribution of the variables.</li>
+<li>The representational learning approach is similar to the classical machine learning approach with the added value difference that the reduction of the features that are used in the model is learnt directly from the data. There is very little or no intervention from the modeller in this stage.</li>
+<li>The deep learning approach is then different to representation learning mainly in the mapping layer. So, in representational learning, you could get to the model and understsand what effect does a variable have in the final output, but in deep learning, the system is creating layers of more abstract features with weightings that can be very difficult to understand in the final output when analysed on their own.</li>
+</ul>
+<p><img src="images/3.PNG" width="732" /></p>
+<p>Taking the last point above about having multiple layers of abstract features derived from a much simple set of input features, lets check the typical image recognition example. As you can see in the image below, this deep learning method has created 5 layers (1 input, 3 intermediate and 1 output layer).</p>
+<ul>
+<li>The input layer is based on all the raw images</li>
+<li>The first intermediate layer is pretty much impossible to understand on its own. What the hell is the layer representing with the calculations it is doing??</li>
+<li>The second intermediate layers then builds up from the previous and it can now start grouping stuff together. This layer is a bit more recognisable as you can see how the model is now able to capture different types of eyes, mouths, noses.</li>
+<li>The third intermediate layer is obviously close to what we want to predict, and it can use the suttle difference in parts of a face to create new faces</li>
+<li>Finally, the output layer will then classify faces or try to rebuild the image as throughly as possible.</li>
+<li>As you have seen, the deep learning method is a <strong>hierarchical</strong> method, where lower layers represent very simple patterns and then start building from there to capture partial patterns to a point where the pattern recognition is complete.</li>
+</ul>
+<p><img src="images/4.PNG" width="1019" /></p>
+</div>
+<div id="how-to-automatically-learn-from-data" class="section level2">
+<h2><span class="header-section-number">1.3</span> How to automatically learn from data</h2>
+<p>The previous example was a very specific and tailored one, and the good thing about this problem is that you can actually see what the layers are starting to infer at each point. However, is the problem at hand didnt have to do with images, then it would be very difficult to understand what is happening in those layers, as you would pretty much see numbers (pretty much impossible to make sense of). So, it is key to understand how deep learning learns data to trust that what it’s doing is fine.</p>
+<p>The deep learning model doesnt really differ much in terms of how is learns data at a high level with how other machine learning algorithms work. Firstly, there is a loss function (that can be a certain type of error) and what the model will try to do is combine the data to try to minimize this error as much as possible. Given that this loss function is a general function, you can apply it to classification by, for example, defining the loss function as the accuracy/specificity/more complex KPIs, or you can apply it to regression and try to minimise RMSE/MSE/etc.</p>
+<p><img src="images/5.PNG" width="694" /></p>
+<p>To make this concept clear, here is an example of loss function applied to regression model (loss function is the MSE - mean square error):</p>
+<p><img src="images/6.PNG" width="723" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="introduction-to-artificial-neural-networks" class="section level1">
+<h1><span class="header-section-number">2</span> Introduction to artificial neural networks</h1>
+<div id="the-vast-world-of-anns" class="section level2">
+<h2><span class="header-section-number">2.1</span> The vast world of ANNs</h2>
+<p>ANNs can be framed in 2 main categories:</p>
+<ul>
+<li>Feed-forward - where layers of neurons are only connected on a down stream pattern</li>
+<li>Recursive - where layers can also be connected backwards and create cycles.</li>
+</ul>
+<p><img src="images/7.PNG" width="651" /></p>
+<p><br></p>
+<p><img src="images/8.PNG" width="657" /></p>
+</div>
+<div id="the-perceptron-algorithm" class="section level2">
+<h2><span class="header-section-number">2.2</span> The perceptron algorithm</h2>
+<p>The perceptron is the <strong>fundamental computational unit</strong> at the heart of every deep learning model and it actually inspired by a real biological neuron (one of the many we have in our body!).</p>
+<p>It is a supervised learning algorithm to output binary classification. Lets follow the path in the square box:</p>
+<ul>
+<li>Initially, we have different input values <span class="math inline">\(x\)</span> and a bias term (imagine it as an intercept term) which is always equal 1.</li>
+<li>Those terms get assigned weights <span class="math inline">\(w\)</span></li>
+<li>Combining both with a linear model <span class="math inline">\(w_0 + w*x\)</span>, we can get different values and depending on the values we can classify them as either 1 or 0. This is the net input function.</li>
+<li>Eventually, we can apply an activation function to give the results a bit more of a smooth behaviour. FOr example, this activation function can be the sigmoid function (shown in the lower right).</li>
+</ul>
+<p><strong>The hardest problem we are ommitting here is actually how to learn those weights <span class="math inline">\(w\)</span>??</strong>. This will be looked at in following sections/posts</p>
+<p><img src="images/9.PNG" width="738" /></p>
+<div id="perceptron-geometric-interpretation" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Perceptron geometric interpretation</h3>
+<p>As an example of a linear proble, the perceptron can be interpreted as the way to pick those parameters that fit the best line (if its 2D) or a hyperplane (if its 3D or more dimensiones). Using the notation above, for a simple 2D linear problem, we will have 1 bias term neuron <span class="math inline">\(w_0\)</span> and 1 input neuron <span class="math inline">\(w_1\)</span>.</p>
+<p><img src="images/10.PNG" width="702" /></p>
+</div>
+</div>
+<div id="the-multilayer-perceptron" class="section level2">
+<h2><span class="header-section-number">2.3</span> The multilayer perceptron</h2>
+<p>As you can imagine, the multilayer perceptron algorithm is a method whereby we have more than 1 layer using perceptron units (like the ones above). It is a feedforward ANN and by having more neuron layers, it is able to pick relationships that are not necessarily linear. In the image below, a MLP will be able to pick the classification distinction which is represented by a non-linear line (a circle in this case).</p>
+<p><img src="images/11.PNG" width="723" /></p>
+<p>So, lets look at an example of how the MLP works:</p>
+<ul>
+<li>Starting at the left of the diagram, we have 3 input variables (3 input neurons).</li>
+<li>We can add extra layers of neurons all connected to the same initial 3 neurons, and then add extra perceptrons that take the input of thay bigger 5 neuron layer.</li>
+<li>The MLP can be also seen as a simple Matrix Vector multiplication:</li>
+<li>We have our input data <span class="math inline">\(x_{(3,1)}\)</span></li>
+<li>We have the matrix of weights, where each neuron will have a weight for each of the different input neurons. This is why is looks like a 5x3 matrix; 5 being the number of neurons in the hidden layer and 3 being the number of neuron in the input layer.</li>
+<li>We then multiply both matrices and we get the matrix for the hidden layer <span class="math inline">\(h_{(5,1)}\)</span></li>
+<li>We then have the second stage layer, where the hidden layer becomes the input layer and the ouput layer receives the information from this 5 neuron layer.</li>
+<li>This means that then we have a vector of 5x1, representing the 5 inputs of the 5 neurons in the hidden layer</li>
+<li>Then we have <span class="math inline">\(w_0\)</span>, which is a 2x5 matrix; 2 representing the number of neurons in the output layer and 5 representing the weights it will give to each of the input neurons.</li>
+<li>We repreat the matrix multiplication and end with an output layer of matrix <span class="math inline">\(o_{(2,1)}\)</span></li>
+</ul>
+<p><img src="images/12.PNG" width="701" /></p>
+</div>
+<div id="packages-for-anns" class="section level2">
+<h2><span class="header-section-number">2.4</span> Packages for ANNs</h2>
+<p><img src="images/13.PNG" width="721" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="classification-with-2-layers-of-anns" class="section level1">
+<h1><span class="header-section-number">3</span> Classification with 2-layers of ANNs</h1>
+<p>In this section we will learn how to build our first two-layers neural networks (Multi Layer Perceptron) using caret and nnet. We will train our neural network to recognize hanwritten digits. Lets start by downloading the data:</p>
+<p><img src="images/14.PNG" width="728" /></p>
+<p><br></p>
+<p><img src="images/15.PNG" width="731" /></p>
+<p>For our model, we can choose to use the MLP architecture. We have 784 input neurons, we can reduce those mapped to 5 hidden neurons, and the go back again to 10 output neurons, which represents the different classes in the dataset. Basically, what we are saying is that the only thing that we can change is:</p>
+<ul>
+<li>Either add more hidden layers</li>
+<li>Either add more/less neurons in the hidden layer</li>
+<li>But we cant definitely change the number of input neurons, as that is the number of records in the data we are going to use, and we cant change the number of output neurons, because that is the number of different classes we want to classify.</li>
+</ul>
+<p><img src="images/16.PNG" width="707" /></p>
+<pre class="r"><code>library(nnet)
+library(caret)
+
+options(digits=3)
+set.seed(1234)
+
+digits.data &lt;- read.csv(&quot;train.csv&quot;)</code></pre>
+<p>Let’s see how the data are structured:</p>
+<pre class="r"><code>dim(digits.data)</code></pre>
+<pre><code>## [1] 42000   785</code></pre>
+<pre class="r"><code># 42k images
+# 785 columns - the first is the label (the number), the rest is the pixel
+
+head(colnames(digits.data), 4)</code></pre>
+<pre><code>## [1] &quot;label&quot;  &quot;pixel0&quot; &quot;pixel1&quot; &quot;pixel2&quot;</code></pre>
+<pre class="r"><code>tail(colnames(digits.data), 4)</code></pre>
+<pre><code>## [1] &quot;pixel780&quot; &quot;pixel781&quot; &quot;pixel782&quot; &quot;pixel783&quot;</code></pre>
+<pre class="r"><code>head(digits.data[1:2, 1:4])</code></pre>
+<pre><code>##   label pixel0 pixel1 pixel2
+## 1     1      0      0      0
+## 2     0      0      0      0</code></pre>
+<p>Let us convert the labels into factor and visualize their distribution. We use only the first 5000 images for training and the rest for testing purpose.</p>
+<pre class="r"><code>digits.data$label &lt;- factor(digits.data$label, levels = 0:9)
+i &lt;- 1:5000
+digits.X &lt;- digits.data[i, -1]
+digits.y &lt;- digits.data[i, 1]</code></pre>
+<p>Now we can train our MLP with the caret wrapper:</p>
+<pre class="r"><code>digits.m1 &lt;- train(x = digits.X, y = digits.y,
+           method = &quot;nnet&quot;
+           , tuneGrid = expand.grid(
+                             .size = c(5) # SPECIFY HIDDEN NEURONS
+                             , .decay = 0.1)
+           , trControl = trainControl(method = &quot;none&quot;, seeds = 123)
+           , MaxNWts = 10000
+           , maxit = 100
+           )</code></pre>
+<pre><code>## # weights:  3985
+## initial  value 13931.009387 
+## iter  10 value 10822.823757
+## iter  20 value 9285.729951
+## iter  30 value 9107.339298
+## iter  40 value 8831.708292
+## iter  50 value 8584.573515
+## iter  60 value 8519.046528
+## iter  70 value 8268.134068
+## iter  80 value 8046.144291
+## iter  90 value 7961.550471
+## iter 100 value 7900.047441
+## final  value 7900.047441 
+## stopped after 100 iterations</code></pre>
+<p>Let’s how accurate is this model on the training set</p>
+<pre class="r"><code>digits.yhat1 &lt;- predict(digits.m1)
+caret::confusionMatrix(xtabs(~digits.yhat1 + digits.y))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             digits.y
+## digits.yhat1   0   1   2   3   4   5   6   7   8   9
+##            0 179   2   1   0   0  71   1   1  27   2
+##            1   4 432  22  10   9  49   1  32  67  55
+##            2  27   3 265  11  16   8  32  23   4  10
+##            3  13 113  96 420   0 130   7  10 194  17
+##            4   0   0   0   0   0   0   0   0   0   0
+##            5  89   6  24  33   0 138   6   0 125   1
+##            6 175   1  99   1 148  68 440  16  36  15
+##            7   7   1  38   5 304   5  29 424  24 378
+##            8   0   0   0   0   0   0   0   0   0   0
+##            9   0   0   0   0   0   0   0   0   0   0
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.46          
+##                  95% CI : (0.446, 0.474)
+##     No Information Rate : 0.112         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.398         
+##  Mcnemar&#39;s Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9
+## Sensitivity            0.3623   0.7742   0.4862    0.875   0.0000   0.2942    0.853   0.8379   0.0000   0.0000
+## Specificity            0.9767   0.9439   0.9699    0.872   1.0000   0.9373    0.875   0.8240   1.0000   1.0000
+## Pos Pred Value         0.6303   0.6344   0.6642    0.420      NaN   0.3270    0.440   0.3490      NaN      NaN
+## Neg Pred Value         0.9332   0.9708   0.9391    0.985   0.9046   0.9277    0.981   0.9783   0.9046   0.9044
+## Prevalence             0.0988   0.1116   0.1090    0.096   0.0954   0.0938    0.103   0.1012   0.0954   0.0956
+## Detection Rate         0.0358   0.0864   0.0530    0.084   0.0000   0.0276    0.088   0.0848   0.0000   0.0000
+## Detection Prevalence   0.0568   0.1362   0.0798    0.200   0.0000   0.0844    0.200   0.2430   0.0000   0.0000
+## Balanced Accuracy      0.6695   0.8591   0.7281    0.873   0.5000   0.6158    0.864   0.8310   0.5000   0.5000</code></pre>
+<div id="increasingdecreasing-max-iterations-for-the-model" class="section level3">
+<h3><span class="header-section-number">3.0.1</span> Increasing/decreasing max iterations for the model</h3>
+<p>Compare with the values above.</p>
+<p>Summary:</p>
+<ul>
+<li>More iter -&gt; more train accuracy</li>
+<li>Less iter -&gt; less train accuracy</li>
+</ul>
+<pre class="r"><code>digits.m1 &lt;- train(x = digits.X, y = digits.y,
+           method = &quot;nnet&quot;
+           , tuneGrid = expand.grid(
+                             .size = c(5) # SPECIFY HIDDEN NEURONS
+                             , .decay = 0.1)
+           , trControl = trainControl(method = &quot;none&quot;, seeds = 123)
+           , MaxNWts = 10000
+           , maxit = 50
+           )</code></pre>
+<pre><code>## # weights:  3985
+## initial  value 13931.009387 
+## iter  10 value 10822.823757
+## iter  20 value 9285.729951
+## iter  30 value 9107.339298
+## iter  40 value 8831.708292
+## iter  50 value 8584.573515
+## final  value 8584.573515 
+## stopped after 50 iterations</code></pre>
+<pre class="r"><code>digits.yhat1 &lt;- predict(digits.m1)
+caret::confusionMatrix(xtabs(~digits.yhat1 + digits.y))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             digits.y
+## digits.yhat1   0   1   2   3   4   5   6   7   8   9
+##            0 357  10  45  66   0 227   3   1 196   3
+##            1   4 452  28  10   6  48   1 218  65  64
+##            2  17   4 229  53  13   8  31  12  12   6
+##            3   8  82  67 320   0  70   1   5  86   9
+##            4   0   0   0   0   1   0   0   0   0   0
+##            5   0   0   0   0   0   0   0   0   0   0
+##            6 102   3 136  27 223 108 474  28  97  32
+##            7   0   0   0   0   0   0   0   0   0   0
+##            8   0   0   0   0   0   0   0   0   0   0
+##            9   6   7  40   4 234   8   6 242  21 364
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.439         
+##                  95% CI : (0.426, 0.453)
+##     No Information Rate : 0.112         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.376         
+##  Mcnemar&#39;s Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9
+## Sensitivity            0.7227   0.8100   0.4202    0.667   0.0021   0.0000   0.9186    0.000   0.0000   0.7615
+## Specificity            0.8777   0.9000   0.9650    0.927   1.0000   1.0000   0.8314    1.000   1.0000   0.8744
+## Pos Pred Value         0.3932   0.5045   0.5948    0.494   1.0000      NaN   0.3854      NaN      NaN   0.3906
+## Neg Pred Value         0.9665   0.9742   0.9315    0.963   0.9048   0.9062   0.9889    0.899   0.9046   0.9720
+## Prevalence             0.0988   0.1116   0.1090    0.096   0.0954   0.0938   0.1032    0.101   0.0954   0.0956
+## Detection Rate         0.0714   0.0904   0.0458    0.064   0.0002   0.0000   0.0948    0.000   0.0000   0.0728
+## Detection Prevalence   0.1816   0.1792   0.0770    0.130   0.0002   0.0000   0.2460    0.000   0.0000   0.1864
+## Balanced Accuracy      0.8002   0.8550   0.6926    0.797   0.5010   0.5000   0.8750    0.500   0.5000   0.8179</code></pre>
+<pre class="r"><code>digits.m1 &lt;- train(x = digits.X, y = digits.y,
+           method = &quot;nnet&quot;
+           , tuneGrid = expand.grid(
+                             .size = c(5) # SPECIFY HIDDEN NEURONS
+                             , .decay = 0.1)
+           , trControl = trainControl(method = &quot;none&quot;, seeds = 123)
+           , MaxNWts = 10000
+           , maxit = 500
+           )</code></pre>
+<pre><code>## # weights:  3985
+## initial  value 13931.009387 
+## iter  10 value 10822.823757
+## iter  20 value 9285.729951
+## iter  30 value 9107.339298
+## iter  40 value 8831.708292
+## iter  50 value 8584.573515
+## iter  60 value 8519.046528
+## iter  70 value 8268.134068
+## iter  80 value 8046.144291
+## iter  90 value 7961.550471
+## iter 100 value 7900.047441
+## iter 110 value 7837.397142
+## iter 120 value 7795.716248
+## iter 130 value 7609.922992
+## iter 140 value 7574.203658
+## iter 150 value 7552.128153
+## iter 160 value 7490.120161
+## iter 170 value 7482.996390
+## iter 180 value 7467.257662
+## iter 190 value 7442.731164
+## iter 200 value 7402.624549
+## iter 210 value 7389.522209
+## iter 220 value 7374.254208
+## iter 230 value 7357.022723
+## iter 240 value 7348.004900
+## iter 250 value 7331.115357
+## iter 260 value 7318.086814
+## iter 270 value 7303.424703
+## iter 280 value 7294.814881
+## iter 290 value 7288.508480
+## iter 300 value 7282.013956
+## iter 310 value 7275.000871
+## iter 320 value 7270.376270
+## iter 330 value 7266.598260
+## iter 340 value 7265.009177
+## iter 350 value 7252.335084
+## iter 360 value 7215.356635
+## iter 370 value 7169.984897
+## iter 380 value 7125.986377
+## iter 390 value 7112.456460
+## iter 400 value 7092.116051
+## iter 410 value 7085.469267
+## iter 420 value 7083.597417
+## iter 430 value 7077.363494
+## iter 440 value 7022.282271
+## iter 450 value 7011.692812
+## iter 460 value 6991.302044
+## iter 470 value 6983.934843
+## iter 480 value 6978.246631
+## iter 490 value 6956.815634
+## iter 500 value 6944.129051
+## final  value 6944.129051 
+## stopped after 500 iterations</code></pre>
+<pre class="r"><code>digits.yhat1 &lt;- predict(digits.m1)
+caret::confusionMatrix(xtabs(~digits.yhat1 + digits.y))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             digits.y
+## digits.yhat1   0   1   2   3   4   5   6   7   8   9
+##            0 261  11   6   4   3 133   4   7  74   5
+##            1   0 424  16   7   4  19   1  14  30  47
+##            2  14   1 321   8  19  12 122  24   6  10
+##            3  11 107  67 402   1  50   3   8  62  16
+##            4   1   0   0   0   0   0   0   0   0   0
+##            5   0   0   0   0   0   0   0   0   0   0
+##            6  43   1  37   2 216  24 346  21  24  27
+##            7   1   0  32   2 234   0   2 431  12 372
+##            8 163  14  66  55   0 231  38   1 269   1
+##            9   0   0   0   0   0   0   0   0   0   0
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.491         
+##                  95% CI : (0.477, 0.505)
+##     No Information Rate : 0.112         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.433         
+##  Mcnemar&#39;s Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9
+## Sensitivity            0.5283   0.7599   0.5890   0.8375   0.0000   0.0000   0.6705   0.8518   0.5639   0.0000
+## Specificity            0.9452   0.9689   0.9515   0.9281   0.9998   1.0000   0.9119   0.8543   0.8742   1.0000
+## Pos Pred Value         0.5138   0.7544   0.5978   0.5530   0.0000      NaN   0.4669   0.3969   0.3210      NaN
+## Neg Pred Value         0.9481   0.9698   0.9498   0.9817   0.9046   0.9062   0.9601   0.9808   0.9500   0.9044
+## Prevalence             0.0988   0.1116   0.1090   0.0960   0.0954   0.0938   0.1032   0.1012   0.0954   0.0956
+## Detection Rate         0.0522   0.0848   0.0642   0.0804   0.0000   0.0000   0.0692   0.0862   0.0538   0.0000
+## Detection Prevalence   0.1016   0.1124   0.1074   0.1454   0.0002   0.0000   0.1482   0.2172   0.1676   0.0000
+## Balanced Accuracy      0.7368   0.8644   0.7703   0.8828   0.4999   0.5000   0.7912   0.8530   0.7191   0.5000</code></pre>
+</div>
+<div id="increasingdecreasing-hidden-layers-for-the-model" class="section level3">
+<h3><span class="header-section-number">3.0.2</span> Increasing/decreasing hidden layers for the model</h3>
+<p>Compare with the values above.</p>
+<p>Summary:</p>
+<ul>
+<li>More hidden layers -&gt; more train accuracy</li>
+<li>Less hidden layers -&gt; less train accuracy</li>
+</ul>
+<pre class="r"><code>digits.m1 &lt;- train(x = digits.X, y = digits.y,
+           method = &quot;nnet&quot;
+           , tuneGrid = expand.grid(
+                             .size = c(3) # SPECIFY HIDDEN NEURONS
+                             , .decay = 0.1)
+           , trControl = trainControl(method = &quot;none&quot;, seeds = 123)
+           , MaxNWts = 10000
+           , maxit = 100
+           )</code></pre>
+<pre><code>## # weights:  2395
+## initial  value 12703.749508 
+## iter  10 value 10684.475918
+## iter  20 value 10487.257770
+## iter  30 value 10386.431709
+## iter  40 value 9932.685291
+## iter  50 value 9673.425290
+## iter  60 value 9656.399204
+## iter  70 value 9602.417521
+## iter  80 value 9083.899502
+## iter  90 value 8967.653995
+## iter 100 value 8941.332635
+## final  value 8941.332635 
+## stopped after 100 iterations</code></pre>
+<pre class="r"><code>digits.yhat1 &lt;- predict(digits.m1)
+caret::confusionMatrix(xtabs(~digits.yhat1 + digits.y))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             digits.y
+## digits.yhat1   0   1   2   3   4   5   6   7   8   9
+##            0   0   0   0   0   0   0   0   0   0   0
+##            1   0 331   8   2   2   1   0  24   4   2
+##            2 468 225 486 474  85 460 235  54 455  68
+##            3   0   0   0   0   0   0   0   0   0   0
+##            4  25   2  46   4 371   7 280  94  15 362
+##            5   0   0   0   0   0   0   0   0   0   0
+##            6   0   0   0   0   0   0   0   0   0   0
+##            7   1   0   5   0  18   1   1 334   3  46
+##            8   0   0   0   0   0   0   0   0   0   0
+##            9   0   0   0   0   1   0   0   0   0   0
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.304         
+##                  95% CI : (0.292, 0.317)
+##     No Information Rate : 0.112         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.223         
+##  Mcnemar&#39;s Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9
+## Sensitivity            0.0000   0.5932   0.8917    0.000   0.7778   0.0000    0.000   0.6601   0.0000   0.0000
+## Specificity            1.0000   0.9903   0.4334    1.000   0.8154   1.0000    1.000   0.9833   1.0000   0.9998
+## Pos Pred Value            NaN   0.8850   0.1615      NaN   0.3076      NaN      NaN   0.8166      NaN   0.0000
+## Neg Pred Value         0.9012   0.9509   0.9704    0.904   0.9721   0.9062    0.897   0.9625   0.9046   0.9044
+## Prevalence             0.0988   0.1116   0.1090    0.096   0.0954   0.0938    0.103   0.1012   0.0954   0.0956
+## Detection Rate         0.0000   0.0662   0.0972    0.000   0.0742   0.0000    0.000   0.0668   0.0000   0.0000
+## Detection Prevalence   0.0000   0.0748   0.6020    0.000   0.2412   0.0000    0.000   0.0818   0.0000   0.0002
+## Balanced Accuracy      0.5000   0.7918   0.6626    0.500   0.7966   0.5000    0.500   0.8217   0.5000   0.4999</code></pre>
+<pre class="r"><code>digits.m1 &lt;- train(x = digits.X, y = digits.y,
+           method = &quot;nnet&quot;
+           , tuneGrid = expand.grid(
+                             .size = c(9) # SPECIFY HIDDEN NEURONS
+                             , .decay = 0.1)
+           , trControl = trainControl(method = &quot;none&quot;, seeds = 123)
+           , MaxNWts = 10000
+           , maxit = 100
+           )</code></pre>
+<pre><code>## # weights:  7165
+## initial  value 13455.211335 
+## iter  10 value 9552.951052
+## iter  20 value 8035.424560
+## iter  30 value 7696.266333
+## iter  40 value 7413.470402
+## iter  50 value 7144.503359
+## iter  60 value 6932.801144
+## iter  70 value 6844.368620
+## iter  80 value 6713.236345
+## iter  90 value 6426.004537
+## iter 100 value 6246.288780
+## final  value 6246.288780 
+## stopped after 100 iterations</code></pre>
+<pre class="r"><code>digits.yhat1 &lt;- predict(digits.m1)
+caret::confusionMatrix(xtabs(~digits.yhat1 + digits.y))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             digits.y
+## digits.yhat1   0   1   2   3   4   5   6   7   8   9
+##            0 419   0  16  34   1 114  42   7  14  14
+##            1   0 510   5   1   1   9   5   6  10   2
+##            2  15   0 307  17   1  16  23   6  25   3
+##            3  45   6 110 366   0 155   2   1  43   4
+##            4   3   0  30   4 308   8  51  26  14  76
+##            5   6  27   7   8   1 107  38   3  39   0
+##            6   0   0  37   2   2   4 351   2   1   1
+##            7   1   1   8  19   5   2   0 388   4  34
+##            8   4  12  14  21  14  48   2   8 321  11
+##            9   1   2  11   8 144   6   2  59   6 333
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.682         
+##                  95% CI : (0.669, 0.695)
+##     No Information Rate : 0.112         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.647         
+##  Mcnemar&#39;s Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9
+## Sensitivity            0.8482    0.914   0.5633   0.7625   0.6457   0.2281   0.6802   0.7668   0.6730   0.6967
+## Specificity            0.9463    0.991   0.9762   0.9190   0.9531   0.9715   0.9891   0.9835   0.9704   0.9471
+## Pos Pred Value         0.6339    0.929   0.7433   0.5000   0.5923   0.4534   0.8775   0.8398   0.7055   0.5822
+## Neg Pred Value         0.9827    0.989   0.9481   0.9733   0.9623   0.9240   0.9641   0.9740   0.9657   0.9673
+## Prevalence             0.0988    0.112   0.1090   0.0960   0.0954   0.0938   0.1032   0.1012   0.0954   0.0956
+## Detection Rate         0.0838    0.102   0.0614   0.0732   0.0616   0.0214   0.0702   0.0776   0.0642   0.0666
+## Detection Prevalence   0.1322    0.110   0.0826   0.1464   0.1040   0.0472   0.0800   0.0924   0.0910   0.1144
+## Balanced Accuracy      0.8972    0.953   0.7698   0.8408   0.7994   0.5998   0.8347   0.8752   0.8217   0.8219</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="probabilistic-predictions-with-a-2-layer-ann" class="section level1">
+<h1><span class="header-section-number">4</span> Probabilistic predictions with a 2-layer ANN</h1>
+<p>In this section we will learn how to extract probabilist predictions out of our first two-layers neural networks (Multi Layer Perceptron) using caret and nnet. In the previous section, the output of was based on the maximum value of the output neurons to decide which class to pick, but we might be interested in getting the probabilistic values and we can decide what to do with them.</p>
+<p><img src="images/17.PNG" width="771" /></p>
+<p><br></p>
+<p><img src="images/18.PNG" width="724" /></p>
+<p><br></p>
+<p><img src="images/19.PNG" width="733" /></p>
+<p>Let’s recover the predictions we implemented in the previous section. We very clearly see how some classes are being classified in vast majority, and that doesn’t really correspond to the real distribution of classes</p>
+<pre class="r"><code>digits.yhat1 &lt;- predict(digits.m1)
+
+barplot(table(digits.y))</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-71-1.png" /><!-- --></p>
+<pre class="r"><code>barplot(table(digits.yhat1))</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-71-2.png" /><!-- --></p>
+<pre class="r"><code>caret::confusionMatrix(xtabs(~digits.yhat1 + digits.y))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             digits.y
+## digits.yhat1   0   1   2   3   4   5   6   7   8   9
+##            0 419   0  16  34   1 114  42   7  14  14
+##            1   0 510   5   1   1   9   5   6  10   2
+##            2  15   0 307  17   1  16  23   6  25   3
+##            3  45   6 110 366   0 155   2   1  43   4
+##            4   3   0  30   4 308   8  51  26  14  76
+##            5   6  27   7   8   1 107  38   3  39   0
+##            6   0   0  37   2   2   4 351   2   1   1
+##            7   1   1   8  19   5   2   0 388   4  34
+##            8   4  12  14  21  14  48   2   8 321  11
+##            9   1   2  11   8 144   6   2  59   6 333
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.682         
+##                  95% CI : (0.669, 0.695)
+##     No Information Rate : 0.112         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.647         
+##  Mcnemar&#39;s Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9
+## Sensitivity            0.8482    0.914   0.5633   0.7625   0.6457   0.2281   0.6802   0.7668   0.6730   0.6967
+## Specificity            0.9463    0.991   0.9762   0.9190   0.9531   0.9715   0.9891   0.9835   0.9704   0.9471
+## Pos Pred Value         0.6339    0.929   0.7433   0.5000   0.5923   0.4534   0.8775   0.8398   0.7055   0.5822
+## Neg Pred Value         0.9827    0.989   0.9481   0.9733   0.9623   0.9240   0.9641   0.9740   0.9657   0.9673
+## Prevalence             0.0988    0.112   0.1090   0.0960   0.0954   0.0938   0.1032   0.1012   0.0954   0.0956
+## Detection Rate         0.0838    0.102   0.0614   0.0732   0.0616   0.0214   0.0702   0.0776   0.0642   0.0666
+## Detection Prevalence   0.1322    0.110   0.0826   0.1464   0.1040   0.0472   0.0800   0.0924   0.0910   0.1144
+## Balanced Accuracy      0.8972    0.953   0.7698   0.8408   0.7994   0.5998   0.8347   0.8752   0.8217   0.8219</code></pre>
+<p>So, If we want to predict new examples that our model have never seen before:</p>
+<pre class="r"><code>predict(digits.m1, newdata = digits.data[5001:5005,])</code></pre>
+<pre><code>## [1] 3 7 2 6 7
+## Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
+<pre class="r"><code>digits.y[1:5]</code></pre>
+<pre><code>## [1] 1 0 1 4 0
+## Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
+<p>We can show the probabilities per class just adding the type parameter:</p>
+<pre class="r"><code>predict(digits.m1, newdata = digits.data[5001:5005,], type = &quot;prob&quot;)</code></pre>
+<pre><code>##             0        1        2        3        4        5        6        7        8       9
+## 5001 9.29e-02 1.76e-02 1.63e-01 3.99e-01 1.29e-08 2.78e-01 1.21e-02 5.44e-03 2.86e-02 0.00336
+## 5002 2.69e-11 2.61e-10 1.50e-06 6.31e-06 7.74e-02 2.86e-06 2.88e-06 7.77e-01 1.69e-05 0.14539
+## 5003 1.24e-03 2.66e-05 9.40e-01 4.12e-02 1.87e-07 5.75e-03 2.56e-03 1.12e-04 2.69e-03 0.00612
+## 5004 3.81e-02 2.18e-09 1.93e-02 1.48e-03 2.04e-03 6.83e-03 9.29e-01 4.11e-06 7.62e-04 0.00208
+## 5005 6.20e-08 7.79e-11 8.40e-04 7.67e-02 1.03e-05 5.46e-04 1.79e-06 4.96e-01 1.40e-03 0.42490</code></pre>
+<p>Let us visualize the images to understand where the model is failing:</p>
+<pre class="r"><code>vec &lt;- digits.X[4,]
+vec &lt;- data.matrix(vec)
+img &lt;- matrix(vec, ncol = 28, byrow = FALSE)
+image(img, axes = FALSE, col = grey(seq(1, 0, length = 256)))</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-74-1.png" /><!-- --></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
